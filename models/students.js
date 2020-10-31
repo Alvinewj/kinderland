@@ -16,27 +16,12 @@ const studentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    address: [{
-        addr_line_1: {
+    address: {
             type: String,
-            required: true,
-        },
-        addr_line_2: {
-            type: String,
-        },
-        unit: {
-            type: String,
-        },
-        postal_code: {
-            type: String,
-            required: true,
-        },
-    }],
-    emergency_contact: {
-        Name: String,
-        Contact: Number,
-        Relationship: String,
-        required: true
+            required: true
+    },
+    "emergency contact": {
+        type: String,
     },
     created_at: {
         type: Date,

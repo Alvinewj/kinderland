@@ -1,16 +1,18 @@
 const uuid = require('uuid')
 const bcrypt = require('bcrypt')
 const SHA256 = require("crypto-js/sha256")
+const StudentModel = require("../models/students")
 
 
 const AdminModel = require('../models/admin')
+const { result } = require('lodash')
 
 const controllers = {
 
     showRegistrationForm: (req, res) => {
         res.render('admin/adminregister', {
             pageTitle: 'Register as a Admin User'
-
+            
         })
     },
     
@@ -23,6 +25,7 @@ const controllers = {
     register: (req, res) => {
         // validate the users input
         // not implemented yet, try on your own
+     
 
         UserModel.findOne({
             email: req.body.email
@@ -104,15 +107,57 @@ const controllers = {
             })
     },
 
+
     dashboard: (req, res) => {
-        res.render('admin/admindashboard', {
-            pageTitle: 'Admin Dashboard'
+
+        StudentModel.find()
+        .then(result => {
+            res.render('admin/admindashboard', {
+                pageTitle: 'Admin Dashboard',
+                studentdata: result
+                
+             })
+        }).catch(err => {
+            console.log(err)
         })
+    },
+
+    newStudent: (req, res) => {
+
+        StudentModel.create()
+        .then(result => {
+            res.render('admin/adminnew', {
+                pageTitle: 'Admin New Student',
+                studentdata: result
+                
+             })
+        }).catch(err => {
+            console.log(err)
+        })
+    },
+    
+    createStudent: (req, res) => {
+        const slug = _.kebabCase(req.body.student_name)
+
+        StudentModel.create({
+            name: req.body.student_name,
+            age: req.body.student_age,
+            gender: req.body.student_gender,
+            address: req.body.student_address,
+            "emergency contact": req.body.student_emergency_contact
+        })
+            .then(result => {
+                res.redirect('/admin/dashboard')
+            })
+            .catch(err => {
+                console.log(err)
+                res.redirect('admin/adminnew')
+            })
     },
 
     logout: (req, res) => {
         req.session.destroy()
-        res.redirect('/admin/adminlogin')
+        res.redirect('/admin/login')
     }
 
 }

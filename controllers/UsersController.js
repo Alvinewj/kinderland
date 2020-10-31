@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt')
 const SHA256 = require("crypto-js/sha256")
 
 const UserModel = require('../models/users')
+const StudentModel = require('../models/students')
+const { result } = require('lodash')
+const studentsInfo = require('../models/studentsinfo')
 
 const controllers = {
 
@@ -21,6 +24,7 @@ const controllers = {
     register: (req, res) => {
         // validate the users input
         // not implemented yet, try on your own
+        
 
         UserModel.findOne({
             email: req.body.email
@@ -66,6 +70,7 @@ const controllers = {
 
     login: (req, res) => {
         // validate input here on your own
+        
 
         // gets user with the given email
         UserModel.findOne({
@@ -103,8 +108,16 @@ const controllers = {
     },
 
     dashboard: (req, res) => {
-        res.render('/users/dashboard', {
-            pageTitle: 'User Dashboard'
+
+        StudentModel.find()
+        .then(result => {
+            res.render('users/dashboard', {
+                pageTitle: 'User Dashboard',
+                studentdata: result
+                
+             })
+        }).catch(err => {
+            console.log(err)
         })
     },
 

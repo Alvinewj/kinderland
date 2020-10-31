@@ -32,66 +32,65 @@
             </thead>
 
             <tbody class="bg-white divide-y divide-gray-200">
-              
 
+              <form method="POST" action="/admin/admindashboard">
 
-                <% studentdata.forEach(student => { %>
-                    
-                    
+                    <!-- Name -->
                     <tr>
                         <td class="px-6 py-4 whitespace-no-wrap">
                           <div class="flex items-center">
                             <div class="ml-4">
-                              <div class="text-sm leading-5 font-medium text-gray-900 ">
-                               <%= student.name %>
+                              <div class="text-sm leading-5 font-medium text-gray-900 "></div>
+                                <label for="student_name" class="block text-sm font-medium leading-5 text-gray-700"></label>
+                                <input type="text" class="form-control" name="student_name" id="student_name">
                               </div>
                             </div>
                           </div>
                         </td>
-                        
+
+
+                         <!-- Age -->
                         <td class="px-6 py-4 whitespace-no-wrap">
                           <div class="text-sm leading-5 text-gray-900">
-                            <%= student.age %>
+                            <label for="student_age" class="block text-sm font-medium leading-5 text-gray-700"></label>
+                                <input type="number" class="form-control" name="student_age" id="student_age">
                             </div>
                         </td>
                        
+
+                        <!-- Gender -->
                         <td class="px-6 py-4 whitespace-no-wrap">
                           <span class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            <%= student.gender %>
+                                <label for="student_gender" class="block text-sm font-medium leading-5 text-gray-700"></label>
+                                <input type="text" class="form-control" name="student_gender" id="student_gender">
                           </span>
                         </td>
                         
+                        <!-- Address -->
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            <%= student.address %>
+                          <label for="student_address" class="block text-sm font-medium leading-5 text-gray-700"></label>
+                          <input type="text" class="form-control" name="student_address" id="student_address">
                         </td>
                         
+
+                         <!-- Emergency Contact -->
                         <td class="px-6 py-4 whitespace-no-wrap text-sm leading-5 text-gray-500">
-                            <%= student["emergency contact"] %>
+                          <label for="student_emergency_contact" class="block text-sm font-medium leading-5 text-gray-700"></label>
+                          <input type="number" class="form-control" name="student_emergency_contact" id="student_emergency_contact">
                          </td>
         
                         <td class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                          <a href="/student/<%= student.id %>/edit" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                          <a type="submit" class="text-indigo-600 hover:text-indigo-900">Submit</a>
                         </td>
-                       
-                        <form method="POST" action="/student/<%= student %>?_method=DELETE">
-                        <td class="px-6 py-4 whitespace-no-wrap text-right text-sm leading-5 font-medium">
-                            <a href="/student/<%= student.id %>/delete" class="text-indigo-600 hover:text-indigo-900">Delete</a>
-                          </td>
-                          
                       </tr>
-
-                      
-
-                
-                  <% }) %>
-
-                 <!-- Newly Created Students -->
+                    
+                  </form>  
+                    
+                  
 
                  
-                
-
-
-              
+  
+              <!-- More rows... -->
             </tbody>
           </table>
         </div>

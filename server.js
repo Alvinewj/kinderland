@@ -37,6 +37,27 @@ app.use(setUserVarMiddleware)
 // Admin ROUTES
 // ++++++++++++++++
 
+// +++++++++++++++++HOMEPAGE++++++++++++++++++
+
+//homepage
+app.get('/', (req,res) => {
+  res.redirect('/users/login')
+})
+// ++++++++++++++++++++++++++++++++++++++++++++
+
+
+// admin dashboard route
+app.get('/admin/dashboard', AdminController.dashboard)
+
+//admin create new students
+app.get('/admin/new', AdminController.newStudent)
+
+//admin create new students
+app.post('/admin/new', AdminController.createStudent)
+
+// admin new students route
+// app.get('/admin/:slug', AdminController.showStudent)
+
 //admin registration form route
 app.get('/admin/register', adminMiddleWare, AdminController.showRegistrationForm)
 
@@ -54,8 +75,7 @@ app.get('/admin/logout', adminMiddleWare, AdminController.logout)
 // ADMIN ONLY ROUTE
 //+++++++++++++++++++
 
-// user dashboard route
-app.get('/admin/dashboard', authenticatedAdminMiddleware, AdminController.dashboard)
+
 
 //user logout route
 app.get('/admin/logout', authenticatedAdminMiddleware, AdminController.logout)
@@ -64,6 +84,8 @@ app.get('/admin/logout', authenticatedAdminMiddleware, AdminController.logout)
 // +++++++++++++
 // USER ROUTE
 // +++++++++++++
+
+//user homepage
 
 // user registration form route
 app.get('/users/register', guestMiddleWare, UsersController.showRegistrationForm)
@@ -84,7 +106,7 @@ app.post('/users/login', guestMiddleWare, UsersController.login)
 // ++++++++++++++++
 
 // user dashboard route
-app.get('/users/dashboard', authenticatedOnlyMiddleware, UsersController.dashboard)
+app.get('/users/dashboard', UsersController.dashboard)
 
 //user logout route
 app.get('/users/logout', authenticatedOnlyMiddleware, UsersController.logout)
