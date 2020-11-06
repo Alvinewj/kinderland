@@ -2,10 +2,10 @@ const uuid = require('uuid')
 const bcrypt = require('bcrypt')
 const SHA256 = require("crypto-js/sha256")
 const StudentModel = require("../models/students")
-
+const _ = require("lodash")
+const ObjectId = require('mongoose').Types.ObjectId
 
 const AdminModel = require('../models/admin')
-const { result } = require('lodash')
 
 const controllers = {
 
@@ -109,7 +109,6 @@ const controllers = {
 
 
     dashboard: (req, res) => {
-
         StudentModel.find()
         .then(result => {
             res.render('admin/admindashboard', {
@@ -124,21 +123,18 @@ const controllers = {
 
     newStudent: (req, res) => {
 
-        StudentModel.create()
-        .then(result => {
+    
             res.render('admin/adminnew', {
                 pageTitle: 'Admin New Student',
-                studentdata: result
+               
                 
              })
-        }).catch(err => {
-            console.log(err)
-        })
+      
     },
     
     createStudent: (req, res) => {
-        const slug = _.kebabCase(req.body.student_name)
-
+        const slug = _.kebabCase(req.body.name)
+        
         StudentModel.create({
             name: req.body.student_name,
             age: req.body.student_age,
@@ -148,19 +144,51 @@ const controllers = {
         })
             .then(result => {
                 res.redirect('/admin/dashboard')
+                console.log(result)
+                console.log("create successful")
             })
             .catch(err => {
                 console.log(err)
-                res.redirect('admin/adminnew')
+                res.redirect('admin/new')
             })
     },
 
     logout: (req, res) => {
         req.session.destroy()
         res.redirect('/admin/login')
-    }
+    },
 
-}
+    delete: (req,res) => {
+        console.log(req.params.id)
+        console.log("in del route")
+        StudentModel.findOneAndDelete({
+          "_id": ObjectId(req.params.id)
+            
+        })
+        .then(result => {
+            res.redirect('/admin/dashboard')
+            console.log(result)
+        })
+        .catch(err => {
+            console.log(err)
+            res.redirect('admin/dashboard')
+        })
+    },
+    studentEditForm: (req, res) => {
+        const slug = _.kebabCase(req.body.name)
+
+        StudentModel.findOne({
+            slug: req.params.slug
+        })
+            .then(result => {
+                res.render('student/edit') 
+                })
+            .catch(err => {
+                res.redirect('/admin/dashboard')
+            })
+    },
+
+}   
 
 
 

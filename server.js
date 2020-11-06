@@ -58,6 +58,12 @@ app.post('/admin/new', AdminController.createStudent)
 // admin new students route
 // app.get('/admin/:slug', AdminController.showStudent)
 
+// edit route
+app.get('/student/edit', AdminController.studentEditForm)
+
+// delete route
+// app.delete('/products/:slug', productsController.deleteProduct)
+
 //admin registration form route
 app.get('/admin/register', adminMiddleWare, AdminController.showRegistrationForm)
 
@@ -75,7 +81,7 @@ app.get('/admin/logout', adminMiddleWare, AdminController.logout)
 // ADMIN ONLY ROUTE
 //+++++++++++++++++++
 
-
+app.delete('/students/:id', AdminController.delete)
 
 //user logout route
 app.get('/admin/logout', authenticatedAdminMiddleware, AdminController.logout)
