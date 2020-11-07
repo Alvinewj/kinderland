@@ -201,8 +201,24 @@ const controllers = {
 
              })
 
-            StudentModel.update ({
+            //  const firstName = 'chels'
+            //  const lastName = 'ee'
+            //  const fullName = firstName + lastName
 
+            //  const string1 = '/admin/'
+            //  const string3 = '/edit'
+
+             
+            //  const string4 = string1 + "jifrf8rfjrRFjirfr" + string3
+
+            //  // /admin/jifrf8rfjrRFjirfr/edit
+
+            StudentModel.updateOne ({
+
+                "_id": ObjectId(req.params.id)
+
+                         },
+                         {
                         name: req.body.student_name,
                         age: req.body.student_age,
                         gender: req.body.student_gender,
@@ -215,13 +231,9 @@ const controllers = {
                     })
                     .catch(err => {
                         console.log(err)
-                        res.redirect('/admin/edit')
+                        res.redirect('/admin/' + req.params.id + '/edit')
                     })
 
-                     .catch(err => {
-                           console.log(err)
-                           res.redirect('/admin/edit')
-                    })
     },
         
     }
