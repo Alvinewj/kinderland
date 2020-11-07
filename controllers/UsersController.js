@@ -4,10 +4,11 @@ const SHA256 = require("crypto-js/sha256")
 
 const UserModel = require('../models/users')
 const StudentModel = require('../models/students')
-const { result } = require('lodash')
+const _ = require('lodash')
 const studentsInfo = require('../models/studentsinfo')
 
 const controllers = {
+    
 
     showRegistrationForm: (req, res) => {
         res.render('users/register', {

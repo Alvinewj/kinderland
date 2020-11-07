@@ -1,4 +1,4 @@
-const { min } = require('lodash')
+const _ = require('lodash')
 const mongoose = require('mongoose')
 
 const studentSchema = new mongoose.Schema({

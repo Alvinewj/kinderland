@@ -7,10 +7,7 @@ const methodOverride = require('method-override')
 const mongoose = require('mongoose')
 const session = require('express-session')
 const bodyParser = require('body-parser'); 
-const React = require("react");
-const ReactDOM = require("react-dom");
 const AdminController = require('./controllers/AdminController')
-const StudentsController = require('./controllers/StudentsController')
 const UsersController = require('./controllers/UsersController')
 const app = express();
 const port = process.env.PORT || 8888;
@@ -33,89 +30,44 @@ app.use(session({
 }))
 app.use(setUserVarMiddleware)
 
-// ++++++++++++++++
-// Admin ROUTES
-// ++++++++++++++++
-
 // +++++++++++++++++HOMEPAGE++++++++++++++++++
 
 //homepage
 app.get('/', (req,res) => {
-  res.redirect('/users/login')
+  res.redirect('/admin/login')
 })
 // ++++++++++++++++++++++++++++++++++++++++++++
 
 
-// admin dashboard route
+// dashboard route
 app.get('/admin/dashboard', AdminController.dashboard)
 
-//admin create new students
+//create new students
 app.get('/admin/new', AdminController.newStudent)
 
-//admin create new students
+//create new students
 app.post('/admin/new', AdminController.createStudent)
 
-// admin new students route
-// app.get('/admin/:slug', AdminController.showStudent)
+// show edit route
+app.get('/admin/:id/edit', AdminController.studentEditForm)
 
-// edit route
-app.get('/student/edit', AdminController.studentEditForm)
+// update route
+app.patch('/admin/:id', AdminController.updateStudent)
 
-// delete route
-// app.delete('/products/:slug', productsController.deleteProduct)
-
-//admin registration form route
+//registration form route
 app.get('/admin/register', adminMiddleWare, AdminController.showRegistrationForm)
 
-//admin registration 
+//registration 
 app.post('/admin/register', adminMiddleWare, AdminController.register)
 
-//admin login route
+//login route
 app.get('/admin/login', adminMiddleWare, AdminController.showLoginForm)
 
-//admin logout route
+//logout route
 app.get('/admin/logout', adminMiddleWare, AdminController.logout)
 
-
-//+++++++++++++++++++
-// ADMIN ONLY ROUTE
-//+++++++++++++++++++
-
+//Delete Route
 app.delete('/students/:id', AdminController.delete)
-
-//user logout route
-app.get('/admin/logout', authenticatedAdminMiddleware, AdminController.logout)
-
-
-// +++++++++++++
-// USER ROUTE
-// +++++++++++++
-
-//user homepage
-
-// user registration form route
-app.get('/users/register', guestMiddleWare, UsersController.showRegistrationForm)
-
-// user registration
-app.post('/users/register', guestMiddleWare, UsersController.register)
-
-// user login form route
-app.get('/users/login', guestMiddleWare, UsersController.showLoginForm)
-
-// user login route
-app.post('/users/login', guestMiddleWare, UsersController.login)
-
-
-
-// ++++++++++++++++
-// USER ONLY ROUTE
-// ++++++++++++++++
-
-// user dashboard route
-app.get('/users/dashboard', UsersController.dashboard)
-
-//user logout route
-app.get('/users/logout', authenticatedOnlyMiddleware, UsersController.logout)
 
 
 

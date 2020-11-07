@@ -10,14 +10,14 @@ const AdminModel = require('../models/admin')
 const controllers = {
 
     showRegistrationForm: (req, res) => {
-        res.render('admin/adminregister', {
+        res.render('admin/register', {
             pageTitle: 'Register as a Admin User'
             
         })
     },
     
     showLoginForm: (req, res) => {
-        res.render('admin/adminlogin', {
+        res.render('admin/login', {
             pageTitle: 'Admin Login'
         })
     },
@@ -25,15 +25,14 @@ const controllers = {
     register: (req, res) => {
         // validate the users input
         // not implemented yet, try on your own
-     
-
-        UserModel.findOne({
+        
+        StudentModel.findOne({
             email: req.body.email
         })
             .then(result => {
                 // if found in DB, means email has already been take, redirect to registration page
                 if (result) {
-                    res.redirect('/admin/adminregister')
+                    res.redirect('/admin/register')
                     return
                 }
 
@@ -49,7 +48,7 @@ const controllers = {
                 const hash = SHA256(combination).toString()
 
                 // create user in DB
-                UserModel.create({
+                StudentModel.create({
                     first_name: req.body.first_name,
                     last_name: req.body.last_name,
                     email: req.body.email,
@@ -57,7 +56,7 @@ const controllers = {
                     hash: hash
                 })
                     .then(createResult => {
-                        res.redirect('/admin/admindashboard')
+                        res.redirect('/admin/dashboard')
                     })
                     .catch(err => {
                         res.redirect('/admin/register')
@@ -73,14 +72,14 @@ const controllers = {
         // validate input here on your own
 
         // gets user with the given email
-        UserModel.findOne({
+        StudentModel.findOne({
             email: req.body.email
         })
             .then(result => {
                 // check if result is empty, if it is, no user, so login fail, redirect to login page
                 if (!result) {
                     console.log('err: no result')
-                    res.redirect('/admin/adminlogin')
+                    res.redirect('/admin/login')
                     return
                 }
 
@@ -90,7 +89,7 @@ const controllers = {
                 // check if password is correct by comparing hashes
                 if (hash !== result.hash) {
                     console.log('err: hash does not match')
-                    res.redirect('/admin/adminlogin')
+                    res.redirect('/admin/login')
                     return
                 }
 
@@ -99,11 +98,11 @@ const controllers = {
                 // set session user
                 req.session.user = result
 
-                res.redirect('/admin/admindashboard')
+                res.redirect('/admin/dashboard')
             })
             .catch(err => {
                 console.log(err)
-                res.redirect('/admin/adminlogin')
+                res.redirect('/admin/login')
             })
     },
 
@@ -111,8 +110,8 @@ const controllers = {
     dashboard: (req, res) => {
         StudentModel.find()
         .then(result => {
-            res.render('admin/admindashboard', {
-                pageTitle: 'Admin Dashboard',
+            res.render('admin/dashboard', {
+                pageTitle: 'Dashboard',
                 studentdata: result
                 
              })
@@ -124,8 +123,8 @@ const controllers = {
     newStudent: (req, res) => {
 
     
-            res.render('admin/adminnew', {
-                pageTitle: 'Admin New Student',
+            res.render('admin/new', {
+                pageTitle: 'New Student',
                
                 
              })
@@ -144,8 +143,7 @@ const controllers = {
         })
             .then(result => {
                 res.redirect('/admin/dashboard')
-                console.log(result)
-                console.log("create successful")
+                
             })
             .catch(err => {
                 console.log(err)
@@ -161,6 +159,8 @@ const controllers = {
     delete: (req,res) => {
         console.log(req.params.id)
         console.log("in del route")
+
+        
         StudentModel.findOneAndDelete({
           "_id": ObjectId(req.params.id)
             
@@ -174,22 +174,56 @@ const controllers = {
             res.redirect('admin/dashboard')
         })
     },
+
     studentEditForm: (req, res) => {
-        const slug = _.kebabCase(req.body.name)
 
         StudentModel.findOne({
-            slug: req.params.slug
+            "_id": ObjectId(req.params.id)
         })
             .then(result => {
-                res.render('student/edit') 
-                })
-            .catch(err => {
-                res.redirect('/admin/dashboard')
-            })
+                if (! result) {
+                    res.redirect('/admin/dashboard')
+                    return
+                }
+                console.log(result)
+                res.render('admin/edit', {
+                    student: result
+            
+                 })
+        })
     },
+        updateStudent: (req, res) => {
+            const newSlug = _.kebabCase(req.body.id)
 
-}   
+            StudentModel.findOne ({
 
+            "_id": ObjectId(req.params.id)
 
+             })
+
+            StudentModel.update ({
+
+                        name: req.body.student_name,
+                        age: req.body.student_age,
+                        gender: req.body.student_gender,
+                        address: req.body.student_address,
+                        "emergency contact": req.body.student_emergency_contact
+                    })
+            
+                    .then(updateResult => {
+                        res.redirect('/admin/dashboard')
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        res.redirect('/admin/edit')
+                    })
+
+                     .catch(err => {
+                           console.log(err)
+                           res.redirect('/admin/edit')
+                    })
+    },
+        
+    }
 
 module.exports = controllers
